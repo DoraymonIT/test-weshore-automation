@@ -52,7 +52,11 @@ def update_product_in_sheet(sheet, product,category):
 
     if cell:
         # Produit existant, mise à jour du prix et de la variation
-        old_price = float(worksheet.cell(cell.row, 2).value)
+        old_price_str = worksheet.cell(cell.row, 2).value  # récupère la valeur
+        # Nettoyage : on retire les caractères non numériques (sauf le point)
+        old_price_clean = old_price_str.replace("$", "").replace(",", "").strip()
+        old_price = float(old_price_clean)
+
         new_price = product['prix']
         variation = ((new_price - old_price) / old_price) * 100
 
