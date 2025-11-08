@@ -1,10 +1,17 @@
 import gspread
 from google.oauth2.service_account import Credentials
 from datetime import datetime
-
+from config import SHEET_NAME
+import gspread
+from gspread.exceptions import IncorrectCellLabel
+from datetime import datetime
 # Function to authorize Google Sheets API
 def authorize_google_sheets():
-    creds = Credentials.from_service_account_file('credentials.json', scopes=["https://www.googleapis.com/auth/spreadsheets"])
+    creds = Credentials.from_service_account_file('credentials.json',
+            scopes=["https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive"])
+    
+    # creds = Credentials.from_service_account_file('credentials.json', scopes=SCOPES)
+
     client = gspread.authorize(creds)
     return client
 
@@ -12,32 +19,58 @@ def authorize_google_sheets():
 def create_category_sheet(client, category_name):
     sheet = client.open(SHEET_NAME)
     try:
-        worksheet = sheet.add_worksheet(title=category_name, rows="100", cols="10")
-        worksheet.append_row(["Produit", "Prix Actuel", "Prix Précédent", "Variation (%)", "Description", "Rating", "Reviews", "Dernière MAJ"])
+        try:
+            worksheet = sheet.worksheet(category_name)
+            print(f"Worksheet '{category_name}' already exists.")
+        except gspread.exceptions.WorksheetNotFound:
+            worksheet = sheet.add_worksheet(title=category_name, rows="100", cols="10")
+            worksheet.append_row([
+                "Produit", "Prix Actuel", "Prix Précédent", "Variation (%)",
+                "Description", "Rating", "Reviews", "Dernière MAJ"
+            ])
+            print(f"{worksheet.title} created successfully.")
+        return worksheet
     except Exception as e:
         print(f"Error creating sheet: {e}")
+        return None
 
 # Function to update or add product data to Google Sheets
-def update_product_in_sheet(sheet, product):
-    # Find if the product already exists (by name)
-    cell = sheet.find(product['nom'])
+
+
+def update_product_in_sheet(sheet, product,category):
+    """
+    Met à jour un produit existant ou l'ajoute à Google Sheets.
+    """
+    worksheet =  sheet.worksheet(category)
+    
+    try:
+        # Cherche le produit par nom
+        print(f"{sheet}")
+        cell = worksheet.find(product['nom'])
+    except IncorrectCellLabel:
+        cell = None
+
     if cell:
-        old_price = float(sheet.cell(cell.row, 2).value)
+        # Produit existant, mise à jour du prix et de la variation
+        old_price = float(worksheet.cell(cell.row, 2).value)
         new_price = product['prix']
-        # Calculate price variation
         variation = ((new_price - old_price) / old_price) * 100
-        sheet.update_cell(cell.row, 2, new_price)
-        sheet.update_cell(cell.row, 4, variation)
-        sheet.update_cell(cell.row, 8, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+
+        worksheet.update_cell(cell.row, 2, new_price)          # Prix actuel
+        worksheet.update_cell(cell.row, 4, round(variation, 2)) # Variation (%)
+        worksheet.update_cell(cell.row, 8, datetime.now().strftime('%Y-%m-%d %H:%M:%S')) # Dernière MAJ
+
     else:
-        # If product does not exist, append it
-        sheet.append_row([
-            product['nom'], 
-            product['prix'], 
-            product['prix'],  # First entry, so current and previous price are the same
-            0.0,  # No variation on first entry
-            product['description'],
-            product['rating'],
-            product['reviews'],
-            product['date_scraping']
-        ])
+        # Nouveau produit, ajout à la fin
+        row = [
+            product['nom'],                   # Produit
+            product['prix'],                  # Prix actuel
+            product['prix'],                  # Prix précédent (1ère fois)
+            0.0,                              # Variation
+            product['description'],           # Description
+            product['rating'],                # Rating
+            product['reviews'],               # Reviews
+            product['date_scraping']          # Date scraping
+        ]
+        worksheet.append_row(row)
+

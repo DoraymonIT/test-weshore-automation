@@ -8,11 +8,9 @@ Ce projet est une **application Python complète** permettant de **scraper autom
 
 ✅ Scraping automatique de plusieurs catégories de produits
 ✅ Export structuré des données vers Google Sheets
-✅ Détection et suivi des changements de prix
 ✅ API REST complète (FastAPI)
-✅ Architecture modulaire et commentée
-✅ Scheduler automatique (optionnel)
-✅ Alertes e-mail sur changements de prix (optionnel)
+✅ Scheduler automatique  (Pas tester de mon cote )
+✅ Alertes e-mail sur changements de prix (Pas tester de mon cote )
 
 ---
 
@@ -29,6 +27,10 @@ projet/
 ├── requirements.txt     # Dépendances Python
 ├── .env                 # Variables d’environnement
 └── README.md            # Documentation complète
+└── tests.md            # Documentation complète
+└──└── test.api.py            #  Le test des APIs
+└──└── scraper.py            # Tester la Logique de scraping avec Selenium
+└──└──  sheets_manager.py    # tester la Gestion des interactions avec Google Sheets
 ```
 
 ---
@@ -62,24 +64,24 @@ pip install -r requirements.txt
 ### Étape 1 : Activer l’API Google Sheets
 
 1. Rendez-vous sur [Google Cloud Console](https://console.cloud.google.com/).
-2. Créez un **nouveau projet**.
+2. Créez un **nouveau projet** : Test WeShore Automation.
 3. Activez les APIs :
 
    * **Google Sheets API**
    * **Google Drive API**
-4. Créez un **compte de service** (IAM & Admin → Comptes de service).
-5. Téléchargez le fichier `credentials.json` et placez-le à la racine du projet.
+4. Créez un **compte de service** (IAM & Admin → Comptes de service)." scrapy-data@test-weshore-automation.iam.gserviceaccount.com
+5. Téléchargez le fichier `credentials.json` et placez-le à la working Folder du projet.
 
 ---
 
 ### Étape 2 : Créer et partager le Google Sheet
 
 1. Créez une nouvelle feuille Google Sheets nommée **`Product Price Tracker`**.
-2. Partagez-la avec l’adresse e-mail du **compte de service** (ex: `bot@project-id.iam.gserviceaccount.com`).
-3. Copiez l’**ID de la feuille** (dans l’URL) :
+2. Partagez-la avec l’adresse e-mail du **compte de service** (ex: `scrapy-data@test-weshore-automation.iam.gserviceaccount.com`).
+3. Copiez l’**1_7YOn6iLkYl87zfWGYIUHEI6evo15wl7FEDbd5NiD5k** (dans l’URL) :
 
    ```
-   https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID>/edit
+   https://docs.google.com/spreadsheets/d/1_7YOn6iLkYl87zfWGYIUHEI6evo15wl7FEDbd5NiD5k/edit
    ```
 
 ---
@@ -87,8 +89,9 @@ pip install -r requirements.txt
 ### Étape 3 : Créer le fichier `.env`
 
 ```bash
-SPREADSHEET_ID=ton_spreadsheet_id
+SPREADSHEET_ID=1_7YOn6iLkYl87zfWGYIUHEI6evo15wl7FEDbd5NiD5k
 HEADLESS_MODE=True
+...
 ```
 
 ---
@@ -114,6 +117,8 @@ uvicorn main:app --reload --port 8000
 L’API sera disponible à :
 👉 [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
+👉 Pour le Swagger :  [http://127.0.0.1:8000/docs#/default](http://127.0.0.1:8000/docs#/default)
+
 ---
 
 ## 🔗 Endpoints REST
@@ -123,22 +128,11 @@ L’API sera disponible à :
 Déclenche immédiatement le scraping et met à jour Google Sheets.
 
 ```bash
-curl -X POST "http://127.0.0.1:8000/scrape/now" \
-     -H "Content-Type: application/json" \
-     -d '{"categories": ["Laptops", "Tablets", "Touch"], "update_sheets": true}'
+curl -X POST "http://127.0.0.1:8000/scrape/now" 
+
+     Request Body '{"categories": ["Laptops", "Tablets", "Touch"], "update_sheets": true}'
 ```
 
-**Réponse :**
-
-```json
-{
-  "status": "success",
-  "timestamp": "2025-10-31T14:30:00",
-  "categories_scraped": ["Laptops", "Tablets", "Touch"],
-  "total_products": 45,
-  "price_changes_detected": 3
-}
-```
 
 ---
 
@@ -148,61 +142,28 @@ Récupère les produits d’une catégorie spécifique.
 
 ```bash
 curl http://127.0.0.1:8000/products/Laptops
+Parameter : Laptops
 ```
-
-**Exemple de réponse :**
-
-```json
-{
-  "category": "Laptops",
-  "products": [
-    {
-      "nom": "Asus VivoBook",
-      "prix": 295.99,
-      "prix_precedent": 300.00,
-      "variation": -1.34,
-      "description": "Ordinateur portable léger et performant",
-      "rating": 4,
-      "reviews": 10,
-      "derniere_maj": "2025-10-31 14:30"
-    }
-  ]
-}
 ```
 
 ---
 
 ### 📉 GET `/price-changes`
-
+- NB : J'ai mis la logic mais n'est pas encore tester , j'ai besoin de temps pour debugger .
 Retourne les derniers changements de prix détectés.
 
 ```bash
 curl http://127.0.0.1:8000/price-changes
 ```
 
-**Exemple :**
 
-```json
-{
-  "date": "2025-10-31",
-  "total_changes": 3,
-  "changes": [
-    {
-      "product": "Asus VivoBook",
-      "category": "Laptops",
-      "old_price": 300.00,
-      "new_price": 295.99,
-      "variation_percent": -1.34
-    }
-  ]
-}
 ```
 
 ---
 
-## 🕰 Automatisation quotidienne (optionnel)
+## 🕰 Automatisation quotidienne 
 
-Pour exécuter le scraping automatiquement chaque jour à **9h00**, activez le **scheduler APScheduler** :
+Pour exécuter le scraping automatiquement chaque jour à **9h00**, J'active le **scheduler APScheduler** avec le script below:
 
 ```python
 # main.py
@@ -210,7 +171,8 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 def tache_scraping_quotidienne():
     print("Lancement du scraping quotidien...")
-    # Appel à la fonction scrape_now()
+    <!-- Appel A la fonction main qui se base ici : @app.post("/scrape/now")  -->
+    scrape_now()
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(tache_scraping_quotidienne, 'cron', hour=9, minute=0)
@@ -230,12 +192,13 @@ from email.mime.text import MIMEText
 def envoyer_alerte_email(produit, ancien_prix, nouveau_prix):
     msg = MIMEText(f"Changement de prix pour {produit} :\nAncien prix : {ancien_prix}\nNouveau prix : {nouveau_prix}")
     msg['Subject'] = f"Alerte prix : {produit}"
-    msg['From'] = "ton.email@example.com"
-    msg['To'] = "destinataire@example.com"
+    # // J'ai besoin de configuer un email avec accces : SnedOnBehalf
+    msg['From'] = 
+    msg['To'] = "bendrimou@gmail.com"
 
     with smtplib.SMTP('smtp.gmail.com', 587) as serveur:
         serveur.starttls()
-        serveur.login("ton.email@example.com", "motdepasse")
+        serveur.login("bendrimou@gmail.com", "itsASecret")
         serveur.send_message(msg)
 ```
 
@@ -245,11 +208,7 @@ def envoyer_alerte_email(produit, ancien_prix, nouveau_prix):
 
 ## 🧰 Améliorations possibles
 
-* 🔹 Sauvegarde locale dans une base SQLite ou Firestore
-* 🔹 Historique de prix et graphiques d’évolution
-* 🔹 Interface web pour visualiser les données
-* 🔹 Authentification JWT pour sécuriser l’API
-* 🔹 Dockerisation du projet
+
 * 🔹 Tests unitaires avec `pytest`
 
 ---

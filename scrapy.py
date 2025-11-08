@@ -31,9 +31,9 @@ def init_driver():
     options = webdriver.ChromeOptions()
     if HEADLESS:
         options.add_argument("--headless")
+        # J'ai ajouter ces deux elements juste poue etre sur que ca marche dans ma machine .
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
-
     # Création du service
     service = Service(ChromeDriverManager().install())
 
@@ -79,24 +79,19 @@ def scrape_category(category_name: str, category_path: str):
         # Parcours de chaque produit
         for item in items:
             try:
+                # J'ai utilisé des sélecteurs CSS pour extraire les informations
                 # Nom du produit
                 nom = item.find_element(By.CSS_SELECTOR, "a.title").text
-
                 # Prix brut (texte)
                 prix_txt = item.find_element(By.CSS_SELECTOR, "h4.price span[itemprop='price']").text
-
                 # Prix en float
                 prix = float(prix_txt.replace("$", "").strip())
-
                 # Description
                 description = item.find_element(By.CSS_SELECTOR, "p.description").text
-
                 # Rating (nombre d’étoiles)
                 rating = len(item.find_elements(By.CSS_SELECTOR, ".ws-icon-star"))
-
                 # Nombre de reviews brut (texte)
                 reviews_txt = item.find_element(By.CSS_SELECTOR, "span[itemprop='reviewCount']").text
-
                 # Nombre de reviews en entier
                 reviews = int(reviews_txt.strip())
 
@@ -112,7 +107,7 @@ def scrape_category(category_name: str, category_path: str):
                     "reviews": reviews,
                     "categorie": category_name,
                     "date_scraping": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                    # "url": url_produit
+                     "url": url_rel
                 }
 
                 # Ajout à la liste
@@ -163,12 +158,12 @@ def scrape_all_categories():
 # -----------------------------
 # TEST LOCAL
 # -----------------------------
-if __name__ == "__main__":
-    # Lancer le scraping complet
-    resultat = scrape_all_categories()
+# if __name__ == "__main__":
+#     # Lancer le scraping complet
+#     resultat = scrape_all_categories()
 
-    # Affichage d’un résumé
-    for cat, produits in resultat.items():
-        print(f"\n📦 Catégorie : {cat} ({len(produits)} produits)")
-        for p in produits[:3]:  # On n’affiche que les 3 premiers
-            print(f" - {p['nom']} → {p['prix']} $")
+#     # Affichage d’un résumé
+#     for cat, produits in resultat.items():
+#         print(f"\n📦 Catégorie : {cat} ({len(produits)} produits)")
+#         for p in produits[:3]:  # On n’affiche que les 3 premiers
+#             print(f" - {p['nom']} → {p['prix']} $")
