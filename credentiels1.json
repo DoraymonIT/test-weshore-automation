@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "test-weshore-automation",
+  "private_key_id": "00b709d0b62c3645db9e3e6348aa5619f5f8f805",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCkmr+mHLGKjMKl\nnpIjEguZICSLZmUmfYlWg/h3wHvGBT4YwepcDcFRHroMlLlvEg3RjAyRyR8qZg8z\nQryPDzl1R1Mhq9BxWbZS0E4xXLGIB9VFXQ2pxizSFk0twtAKndl5AxMW71ry+xil\nuY9yqPwJ6y6oY0bXKhAWpn0YOw4s4Cz3YyfuQoAW1OJKklauMtMP4koZFcCi+vDY\nCSAck/iovbmLyux714IjjVoblXYiImaVUvYmJOEWeabePAoZvLCLHMCvNWj5faAR\npkPSget1ccJBkOdYADjLOelqI0mkABd7iZ3dL+V+y/PvH4AVfbJPE0OGCs65ZIcV\nd5e3Tpy1AgMBAAECggEABAPtLYF6rtoMyRrlDrgnrBMVwSH80RanE7ZOO9s1Foxv\nMNrRVQoi3DZtktWX8AbKBOgV/TWheuVldO2P78XbzXZ+QSgegn1a2yQb6P/AkIRv\nmYZFFifW7qlyAlR29bzwnqj9o+wWO5VdF9tyDXmw0d8fH41yBdkPuzW35haFG7QZ\nCjh/xHaEQfCB7aEP08aSqeoPcOykLPREMmkV+su7egRvEPQv1L4ahQp1iEfDd7Kd\nT2wvmMUnaIvcOgXsaPHHRADYtVPy7Gzx3e3kQap6rPjcH2K9auJsv1lKrft6gJxG\n6EZjywSIzG9pYEd3WY1fYujkapVJK3A2+8/lJ1j3OwKBgQDP71HKaGYTo2Vfht9Z\nifWv6o3wsw34hi1rru7xHjEOoEMbNmXN/fuEjqBe3izmxDAZBrNq48jOfrzFemCW\nH7piGRUsN2MuiwxU4blMKVUjzrKwVtdpUjo+J93vL4OdW+wNJl0FFbcxg6slEWX8\nxE8ivZ4S7lPvudOhgrPOe7Uk+wKBgQDKp1O1iVahs4Jc//lG5DgBvqZ0frmrk/sd\n9d0IDZCWdAlkpAKoU7EIn6RNefRMQz1ayz/EXl/St38jennAmp8SeslqY9Pq2dCa\ntkPzzvnV+YtAsxn0QjtROYXlHKuKgwqfMoXDKhdbe1/t9wCfQcH8hgck7E+L83JX\nJjdLG4W2DwKBgQDHuHKzG3uQOU1RZ9Z3xk853Ozg2Nr+bsKJv8i5x+oOxlgudx1p\nsh43wFbBSF2QebhJEWqbrJZf4NOoSlcjWu5G8xinE7wsJFp/3R+By+F/NzXiskbN\nXrGaqeg9qUGdj4E3UDXggG8pG/Ly87cmBdiM4dxHCquMgsyHQWc7WQ8wqQKBgQDA\nZMlBIOkBTVYnitETL5nIdkK7eJA3R59xmzjD63TokbNVO6xWOFZrdHxdHboEKRX3\nu9yHRn28pH7spNswMttwhOfxvGK1pSK5ru6makqgjXBZ9W9fiP2dqHnowSZOswgD\niciaN7zDGkdBuW16xMgxQOFJeZwvpulXua1m/fMcmwKBgA0pk9tA+p741IeWq6AG\ndsw/lm1Q6ekfAe6OI44WihK7Hg34dIjjXUlzUgWYE3HsnfkaGsfay1Z8ZvCjJnOT\nFyL0gkxoPnfiSlwKQisM4wMDm7zfwqX55zbjouDVdKSaLcebuu5ZOqaUSUdwy3TZ\n97+yfvMRGRlutP6cHnA2TZ7X\n-----END PRIVATE KEY-----\n",
+  "client_email": "scrapy-data@test-weshore-automation.iam.gserviceaccount.com",
+  "client_id": "118170873016358594615",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/scrapy-data%40test-weshore-automation.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
