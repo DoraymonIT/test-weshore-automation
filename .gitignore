@@ -1,5 +1,3 @@
-.vscode/
-.DS_Store
 credentials.json
 .env
 .venv/
