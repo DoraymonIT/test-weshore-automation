@@ -40,8 +40,8 @@ projet/
 ### 1️⃣ Cloner le dépôt
 
 ```bash
-git clone https://github.com/<ton-nom-utilisateur>/price-tracker.git
-cd price-tracker
+git clone [https://github.com/DoraymonIT/test-weshore-automation.git](https://github.com/DoraymonIT/test-weshore-automation.git)
+cd test-weshore-automation
 ```
 
 ### 2️⃣ Créer un environnement virtuel
@@ -222,9 +222,6 @@ def envoyer_alerte_email(produit, ancien_prix, nouveau_prix):
 uvicorn main:app --reload
 ```
 
-✅ Le scraping s’exécute
-✅ Les données sont envoyées sur Google Sheets
-✅ Les endpoints FastAPI renvoient les résultats au format JSON
 
 ---
 
